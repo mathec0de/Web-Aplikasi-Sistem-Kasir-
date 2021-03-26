@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 26, 2021 at 04:12 AM
+-- Generation Time: Mar 26, 2021 at 04:34 AM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.3.11
 
@@ -48,7 +48,7 @@ CREATE TABLE `detail_transaksi` (
   `id_transaksi` varchar(20) NOT NULL,
   `id_barang` varchar(10) NOT NULL,
   `harga` int(10) NOT NULL,
-  `jumlah_barang` int(3) NOT NULL,
+  `jumlah_barang` int(10) NOT NULL,
   `total_harga` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -69,6 +69,20 @@ DELIMITER ;
 CREATE TABLE `kategori_barang` (
   `id_kategori` varchar(10) NOT NULL,
   `kategori_barang` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `perusahaan`
+--
+
+CREATE TABLE `perusahaan` (
+  `id_perusahaan` varchar(10) NOT NULL,
+  `nama_perusahaan` varchar(30) NOT NULL,
+  `alamat` varchar(255) NOT NULL,
+  `nomor_telepon` varchar(15) NOT NULL,
+  `email` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -122,7 +136,8 @@ CREATE TABLE `supplier` (
   `id_supplier` varchar(10) NOT NULL,
   `nama_supplier` varchar(30) NOT NULL,
   `no_hp` varchar(15) NOT NULL,
-  `alamat_perusahaan` varchar(200) NOT NULL
+  `alamat` varchar(255) NOT NULL,
+  `id_perusahaan` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -203,6 +218,12 @@ ALTER TABLE `kategori_barang`
   ADD PRIMARY KEY (`id_kategori`);
 
 --
+-- Indexes for table `perusahaan`
+--
+ALTER TABLE `perusahaan`
+  ADD PRIMARY KEY (`id_perusahaan`);
+
+--
 -- Indexes for table `satuan_barang`
 --
 ALTER TABLE `satuan_barang`
@@ -227,7 +248,8 @@ ALTER TABLE `stok_masuk`
 -- Indexes for table `supplier`
 --
 ALTER TABLE `supplier`
-  ADD PRIMARY KEY (`id_supplier`);
+  ADD PRIMARY KEY (`id_supplier`),
+  ADD KEY `fk_id_perusahaan` (`id_perusahaan`);
 
 --
 -- Indexes for table `transaksi`
@@ -273,6 +295,12 @@ ALTER TABLE `stok_keluar`
 ALTER TABLE `stok_masuk`
   ADD CONSTRAINT `fk_id_barang_masuk` FOREIGN KEY (`id_barang`) REFERENCES `barang` (`id_barang`),
   ADD CONSTRAINT `fk_id_supplier_masuk` FOREIGN KEY (`id_supplier`) REFERENCES `supplier` (`id_supplier`);
+
+--
+-- Constraints for table `supplier`
+--
+ALTER TABLE `supplier`
+  ADD CONSTRAINT `fk_id_perusahaan` FOREIGN KEY (`id_perusahaan`) REFERENCES `perusahaan` (`id_perusahaan`);
 
 --
 -- Constraints for table `transaksi`
